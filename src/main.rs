@@ -1,31 +1,34 @@
 #![feature(proc_macro_hygiene, decl_macro)]
+
 #[macro_use] extern crate rocket;
-use rocket::http::RawStr;
+#[macro_use] extern crate rocket_contrib;
 
-#[get("/hello/<name>")]
-fn hello(name: String) -> String
-{
-    format!("Hello, {}!", name.as_str())
-}
-
-#[get("/roly?poly&<song>")]
-fn roly(song: &RawStr) -> String
-{   // /roly?song=T-TA&poly
-    format!("I am {}!", song.as_str())
-}
-
+use rocket_contrib::json::{ JsonValue };
 
 #[get("/")]
-fn index() -> &'static str {
+fn index() -> &'static str
+{
     "Hello, world!"
 }
 
-fn main() {
-    rocket::ignite().mount("/",
-        routes![
-            index,
-            hello,
-            roly
-        ]
+#[catch(404)]
+fn not_found() -> JsonValue
+{
+    return json!({ "status": "error", "reason": "Resource was not found." });
+}
+
+#[catch(500)]
+fn server_error() -> JsonValue
+{
+    return json!({ "status": "error", "reason": "Server is down." });
+}
+
+fn main()
+{
+    rocket::ignite()
+    .mount("/",
+        routes![ index ])
+    .register(
+        catchers![ not_found, server_error ]
     ).launch();
 }
