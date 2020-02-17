@@ -3,7 +3,14 @@
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
 
+use rocket::http::RawStr;
 use rocket_contrib::json::{ JsonValue };
+
+#[get("/hello/<message>")]
+fn hello(message: String) -> JsonValue
+{
+    return json!({ "message": message });
+}
 
 #[get("/")]
 fn index() -> &'static str
@@ -26,9 +33,7 @@ fn server_error() -> JsonValue
 fn main()
 {
     rocket::ignite()
-    .mount("/",
-        routes![ index ])
-    .register(
-        catchers![ not_found, server_error ]
-    ).launch();
+    .mount("/",routes![ hello, index ])
+    .register(catchers![ not_found, server_error ])
+    .launch();
 }
