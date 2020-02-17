@@ -1,0 +1,10 @@
+[package]
+name = "icanhazdadjoke-to-github-api-by-rust"
+version = "0.1.0"
+authors = ["iigmir <roc120j@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = "0.4.2"
