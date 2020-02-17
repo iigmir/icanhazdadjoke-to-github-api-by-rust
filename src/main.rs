@@ -3,7 +3,7 @@
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
 
-use rocket::http::RawStr;
+use rocket::http::Method;
 use rocket_contrib::json::{ JsonValue };
 
 #[get("/hello/<message>")]
