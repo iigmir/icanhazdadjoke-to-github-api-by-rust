@@ -1,0 +1,3 @@
+https://www.omdbapi.com/
+http://poetrydb.org/index.html
+https://icanhazdadjoke.com/api
