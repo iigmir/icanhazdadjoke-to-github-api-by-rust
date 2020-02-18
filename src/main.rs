@@ -3,8 +3,19 @@
 #[macro_use] extern crate rocket;
 #[macro_use] extern crate rocket_contrib;
 
-use rocket::http::Method;
 use rocket_contrib::json::{ JsonValue };
+
+async fn joke_request() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
+    return surf::get( "https://httpbin.org/get" ).recv_json().await?;
+}
+
+#[get("/joke")]
+async fn joke() -> JsonValue
+{
+    return json!({ "message": joke_request() });
+}
+//  -> JsonValue
+
 
 #[get("/hello/<message>")]
 fn hello(message: String) -> JsonValue
@@ -33,7 +44,7 @@ fn server_error() -> JsonValue
 fn main()
 {
     rocket::ignite()
-    .mount("/",routes![ hello, index ])
+    .mount("/",routes![ hello, index, joke ])
     .register(catchers![ not_found, server_error ])
     .launch();
 }
