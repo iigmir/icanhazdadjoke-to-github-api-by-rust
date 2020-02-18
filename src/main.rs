@@ -4,14 +4,17 @@
 #[macro_use] extern crate rocket_contrib;
 
 use rocket_contrib::json::{ JsonValue };
+use async_std::task;
 
 async fn joke_request() -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
+    #[derive(Deserialize, Serialize)]
     return surf::get( "https://httpbin.org/get" ).recv_json().await?;
 }
 
 #[get("/joke")]
 async fn joke() -> JsonValue
 {
+    #[derive(Deserialize, Serialize)]
     return json!({ "message": joke_request() });
 }
 //  -> JsonValue
